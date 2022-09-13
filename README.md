@@ -1,7 +1,7 @@
 # ShulkerBoxPreview | 界伏盒預覽
 遊戲版本: 1.17+
 
-Spigot: https://www.spigotmc.org/resources/shulkerboxpreview.105258/
+Spigot: https://www.spigotmc.org/resources/shulkerboxpreview.105258/<br>
 巴哈介紹: https://forum.gamer.com.tw/Co.php?bsn=18673&sn=1036868
 ---
 
