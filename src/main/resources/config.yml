@@ -1,0 +1,61 @@
+## 配置檔案版本，請不要更改此數值！
+config-version: 1
+
+## 自定義插件語言檔，語言檔格式請依照預設配置
+lang_lib: "https://raw.githubusercontent.com/YTiceice/LangLib/main/lang"
+
+## 插件顯示的系統文字
+messages:
+  command:
+    reload: "§b已重新讀取所有配置檔案"
+    no-per: "§c你沒有權限使用這個指令"
+  ## 預覽顯示格式
+  format:
+    ## %1s 為物品命名名稱 , %2s 為物品名稱 [例如: 命名石頭 (石頭)]
+    display-item: "§f%1s (%2s)"
+    ## %1s 為物品命名名稱 , %2s 為物品名稱 , %d 為數量 [例如: 命名石頭 (石頭) x64]
+    display-items: "§f%1s (%2s) x%d"
+    ## %s 為物品名稱 [例如: 石頭]
+    item: "§f%s"
+    ## %s 為物品名稱 , %d 為數量 [例如: 石頭 x64]
+    items: "§f%s x%d"
+
+  ## 每行顯示幾個物品
+  item-per-n-line: 4
+  ## 每個物品的間隔符
+  item-per-n-append: " , "
+  ## 每行開頭的字符
+  first-per-n-line: "  "
+
+## 當開啟或關閉的容器標題為以下之一時更新預覽資料 (可用於避免與選單中的界伏盒衝突)
+whitelist:
+  open:
+    enable: true
+    ## 預設為原版容器 (倘若關閉，則開啟容器時不更新預覽文字)
+    list:
+      - "Shulker Box"
+      - "Chest"
+      - "Brewing Stand"
+      - "Minecart with Hopper"
+      - "Minecart with Chest"
+      - "Item Hopper"
+      - "Ender Chest"
+      - "Dispenser"
+      - "Dropper"
+      - "Furnace"
+      ## 假設你新增了 "123"，那麼名稱為 123 的界面就會在開啟時更新預覽文字
+  close:
+    enable: true
+    ## 預設為原版容器 (倘若關閉，則關閉容器時不更新預覽文字)
+    list:
+      - "Shulker Box"
+      - "Chest"
+      - "Brewing Stand"
+      - "Minecart with Hopper"
+      - "Minecart with Chest"
+      - "Item Hopper"
+      - "Ender Chest"
+      - "Dispenser"
+      - "Dropper"
+      - "Furnace"
+      ## 假設你新增了 "123"，那麼名稱為 123 的界面就會在關閉時更新預覽文字
