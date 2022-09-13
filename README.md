@@ -9,3 +9,13 @@
 **This project is under GPLv3.**
 
 **該插件使用 GPL-3.0 開源證書**
+
+# 🖌Commands | 指令
+```
+/sbpreload - 重新載入插件配置檔案 
+```
+
+# 🔓Permissions | 權限
+```
+sbp.reload - 使用sbpreload的權限
+```
