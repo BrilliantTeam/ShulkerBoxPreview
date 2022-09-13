@@ -59,6 +59,13 @@ public class Events implements Listener {
                     }
                 }
             }
+            for (ItemStack itemStack : event.getInventory()) {
+                if (itemStack != null) {
+                    if (itemStack.getType().equals(SHULKER_BOX) & itemStack.hasItemMeta()) {
+                        Lore.set(itemStack, (Player) event.getPlayer());
+                    }
+                }
+            }
         }
     }
 
