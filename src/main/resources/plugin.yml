@@ -1,12 +1,20 @@
 name: ShulkerBoxPreview
 main: tech.ice.plugins.ShulkerBoxPreview.Main
+<<<<<<< HEAD
 version: 1.1-SNAPSHOT
+=======
+version: 1.0-SNAPSHOT
+api-version: 1.17
+>>>>>>> 7f31f2c84385c70ced39d3315b674b9943ced3ef
 author: YT_iceice
 commands:
   sbpreload:
     description: 重新讀取所有配置檔案
     usage: /sbpreload
+<<<<<<< HEAD
   sbppreview:
     description: 切換是否啟用功能預覽
     usage: /sbppreview <on/off>
     aliases: sbpp
+=======
+>>>>>>> 7f31f2c84385c70ced39d3315b674b9943ced3ef
