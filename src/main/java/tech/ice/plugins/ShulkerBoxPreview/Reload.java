@@ -6,14 +6,14 @@ import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Main.*;
+import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
 
 public class Reload implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender.isOp() && sender.hasPermission("sbp.reload")) {
             try {
-                ShulkerBoxPreview.load();
+                Config.load();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

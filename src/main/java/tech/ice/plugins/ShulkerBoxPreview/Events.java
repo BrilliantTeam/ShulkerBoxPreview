@@ -18,8 +18,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.bukkit.Material.SHULKER_BOX;
-import static tech.ice.plugins.ShulkerBoxPreview.Main.*;
+import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
+import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
 
 public class Events implements Listener {
 
@@ -31,14 +31,14 @@ public class Events implements Listener {
             }
             for (ItemStack itemStack : event.getPlayer().getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().equals(SHULKER_BOX) & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
                         Lore.set(itemStack, (Player) event.getPlayer());
                     }
                 }
             }
             for (ItemStack itemStack : event.getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().equals(SHULKER_BOX) & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
                         Lore.set(itemStack, (Player) event.getPlayer());
                     }
                 }
@@ -54,14 +54,14 @@ public class Events implements Listener {
         if (event.getPlayer() instanceof Player) {
             for (ItemStack itemStack : event.getPlayer().getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().equals(SHULKER_BOX) & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
                         Lore.set(itemStack, (Player) event.getPlayer());
                     }
                 }
             }
             for (ItemStack itemStack : event.getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().equals(SHULKER_BOX) & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
                         Lore.set(itemStack, (Player) event.getPlayer());
                     }
                 }
@@ -72,7 +72,7 @@ public class Events implements Listener {
     @EventHandler
     public void onPickup(EntityPickupItemEvent event) {
         ItemStack itemStack = event.getItem().getItemStack();
-        if (itemStack.getType().equals(SHULKER_BOX) & itemStack.hasItemMeta() & event.getEntityType().equals(EntityType.PLAYER)) {
+        if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta() & event.getEntityType().equals(EntityType.PLAYER)) {
             Lore.set(itemStack, (Player) event.getEntity());
         }
     }

@@ -8,6 +8,8 @@ import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTCompoundList;
 import de.tr7zw.nbtapi.NBTItem;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -22,12 +24,22 @@ import java.io.InputStreamReader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Main.*;
+import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
+import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
 
 public class Lore {
 
     public static void set(ItemStack itemStack, Player player) {
+        UUID uuid = player.getUniqueId();
+        String path = ShulkerBoxPreview.getDataFolder() + "/users/";
+        File data = new File(path + uuid + ".yml");
+        FileConfiguration user = YamlConfiguration.loadConfiguration(data);
+        if (!user.getBoolean("enable")) {
+            Lore.clear(itemStack);
+            return;
+        }
         File file = new File(ShulkerBoxPreview.getDataFolder() + "/langs/" + player.getLocale().toLowerCase() + ".json");
         InputStream is;
         try {
@@ -37,7 +49,6 @@ public class Lore {
         }
         JsonObject locale = new Gson().fromJson(new InputStreamReader(is), JsonObject.class);
         ItemMeta meta = itemStack.getItemMeta();
-        assert meta != null;
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompoundList list = nbtItem.getCompound("BlockEntityTag").getCompoundList("Items");
         int lines = 0;
@@ -243,7 +254,21 @@ public class Lore {
                 }
             }
         }
-        meta.setLore(lore);
+        if (meta != null) {
+            meta.setLore(lore);
+        }
         itemStack.setItemMeta(meta);
+    }
+
+    public static void clear(ItemStack itemStack) {
+        if (itemStack.hasItemMeta()) {
+            if (itemStack.getItemMeta().hasLore()) {
+                List<String> lore = itemStack.getItemMeta().getLore();
+                lore.clear();
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setLore(lore);
+                itemStack.setItemMeta(itemMeta);
+            }
+        }
     }
 }
