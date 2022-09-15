@@ -91,4 +91,3 @@ toggle-command:
     only-player: §c只有玩家能夠使用此指令
     # 當玩家輸入錯指令的的系統顯示文字
     usage: §c用法：/sbppreview <on/off>
-    # 使用/sbppreview on後的系統顯示文字
