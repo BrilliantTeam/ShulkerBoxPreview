@@ -31,10 +31,14 @@ public class Config {
     public static boolean close_whitelist_enable;
     public static String on;
     public static String off;
-    public static String usage;
     public static String only_player;
-    public static Boolean default_enable;
-    public static Boolean force_update;
+    public static String usage;
+    public static boolean force_update;
+    public static boolean default_enable;
+    public static boolean enable_open;
+    public static boolean enable_close;
+    public static boolean enable_pickup;
+    public static boolean enable_held;
 
     public static void load() throws IOException {
 
@@ -88,8 +92,13 @@ public class Config {
         }
         on = config.getString("toggle-command.messages.when-on", "§b你已開啟界伏盒預覽功能");
         off = config.getString("toggle-command.messages.when-off", "§b你已關閉界伏盒預覽功能");
-        usage = config.getString("toggle-command.messages.usage", "§c用法：/sbppreview <on/off>");
         only_player = config.getString("toggle-command.messages.only-player", "§c只有玩家能夠使用此指令");
+        usage = config.getString("toggle-command.messages.usage", "§c用法：/sbppreview <on/off>");
+        force_update = config.getBoolean("force-update", true);
         default_enable = config.getBoolean("toggle-command.default", true);
+        enable_open = config.getBoolean("enable.when-open", true);
+        enable_close = config.getBoolean("enable.when-close", true);
+        enable_pickup = config.getBoolean("enable.pickup-item", true);
+        enable_held = config.getBoolean("enable.held-item", true);
     }
 }

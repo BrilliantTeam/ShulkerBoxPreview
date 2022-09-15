@@ -28,6 +28,22 @@ messages:
   # 每行開頭的字符
   first-per-n-line: '  '
 
+  # 背包內的物品是否會受到 “ 切換界伏盒預覽功能 ” 而影響移除/新增預覽
+  # 倘若開啟，玩家將可以把 “ 沒有預覽 ” 的界伏盒放於商店，可能會導致商店詐欺
+  # 如果特別有需要防詐欺的話，請將此功能設置為 false
+force-update: true
+
+# 當玩家觸發以下事件時更新預覽資料
+enable:
+  # 開啟容器
+  when-open: true
+  # 關閉容器
+  when-close: true
+  # 撿起物品
+  pickup-item: true
+  # 切換手上的物品
+  held-item: true
+
 # 當開啟或關閉的容器標題為以下之一時更新預覽資料 (可用於避免與選單中的界伏盒衝突)
 whitelist:
   open:
@@ -63,6 +79,7 @@ whitelist:
 
 # 是否讓玩家能夠調整是否顯示界伏盒預覽 (/sbppreview)
 toggle-command:
+  # 若玩家未使用設定指令設定是否啟用預覽，則使用此預設值
   default: true
   # 插件顯示的系統文字
   messages:

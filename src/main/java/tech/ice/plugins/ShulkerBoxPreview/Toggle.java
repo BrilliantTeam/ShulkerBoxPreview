@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,13 +53,43 @@ public class Toggle implements CommandExecutor {
             }
         }
         user = YamlConfiguration.loadConfiguration(file);
-        enable = enable.replace("on", "true").replace("off", "false");
-        boolean b = Boolean.parseBoolean(enable);
-        user.set("enable", b);
-        try {
-            user.save(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (enable.equals("on")) {
+            boolean b = true;
+            user.set("enable", b);
+            try {
+                user.save(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            for (ItemStack itemStack : Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())).getInventory()) {
+                if (itemStack != null) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+                        Lore.update(itemStack, Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())));
+                    }
+                }
+            }
+            sender.sendMessage(on);
+            return true;
+        }
+        if (enable.equals("off")) {
+            boolean b = false;
+            user.set("enable", b);
+            try {
+                user.save(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (force_update) {
+                for (ItemStack itemStack : Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())).getInventory()) {
+                    if (itemStack != null) {
+                        if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+                            Lore.update(itemStack, Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())));
+                        }
+                    }
+                }
+            }
+            sender.sendMessage(off);
+            return true;
         }
         return true;
     }

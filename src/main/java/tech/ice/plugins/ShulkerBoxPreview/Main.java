@@ -23,5 +23,6 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Events(), this);
         getServer().getPluginCommand("sbpreload").setExecutor(new Reload());
         getServer().getPluginCommand("sbppreview").setExecutor(new Toggle());
+        getServer().getPluginCommand("sbppreview").setTabCompleter(new TabToggle());
     }
 }
