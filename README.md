@@ -16,6 +16,10 @@ Spigot: https://www.spigotmc.org/resources/shulkerboxpreview.105258/<br>
 # 🖌Commands | 指令
 ```
 /sbpreload - 重新載入插件配置檔案 
+
+/sbppreview on - 開啟界符合預覽功能
+
+/sbppreview off - 關閉界符合預覽功能
 ```
 
 # 🔓Permissions | 權限
