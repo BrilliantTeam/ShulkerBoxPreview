@@ -83,6 +83,7 @@ toggle-command:
   default: true
   # 插件顯示的系統文字
   messages:
+    # 使用/sbppreview on後的系統顯示文字
     when-on: §b你已開啟界伏盒預覽功能
     # 使用/sbppreview off後的系統顯示文字
     when-off: §b你已關閉界伏盒預覽功能
