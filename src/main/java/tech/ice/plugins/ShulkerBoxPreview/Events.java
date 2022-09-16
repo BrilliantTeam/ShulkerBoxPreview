@@ -146,6 +146,7 @@ public class Events implements Listener {
         if (!enable_held) return;
         ItemStack itemStack = event.getPlayer().getInventory().getItem(event.getNewSlot());
         if (itemStack != null) {
+            if (itemStack.toString().contains("AIR")) return;
             if (itemStack.toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
                 Lore.update(itemStack, event.getPlayer());
             }
