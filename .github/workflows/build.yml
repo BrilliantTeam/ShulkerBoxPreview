@@ -35,4 +35,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ShulkerBoxPreview
-        path: ${{ github.workspace }}/target/ShulkerBoxPreview-1.1-SNAPSHOT.jar
+        path: ${{ github.workspace }}/target/ShulkerBoxPreview-*.jar

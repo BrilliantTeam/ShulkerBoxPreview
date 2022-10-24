@@ -1,5 +1,16 @@
 # 配置檔案版本，請不要更改此數值！
-config-version: 1.1
+config-version: 1.2
+
+# 檢查插件版本是否為最新
+check_update:
+  enable: true
+  notify:
+    # 是否於啟動時通知更新
+    startup: true
+    # 是否於具有 sbp.notify 或 op 權限 的玩家加入時通知更新
+    login: true
+    # %s 為最新版本號
+    message: §bShulkerBoxPreview 已推出 %s, 請在此下載更新:§6https://www.spigotmc.org/resources/shulkerboxpreview.105258
 
 # 自定義插件語言檔，語言檔格式請依照預設配置
 lang_lib: https://raw.githubusercontent.com/YTiceice/LangLib/main/lang

@@ -3,6 +3,7 @@ package tech.ice.plugins.ShulkerBoxPreview;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.EntityType;
@@ -23,6 +24,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import java.util.Objects;
+
 import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
 import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
 
@@ -35,7 +38,7 @@ public class Events implements Listener {
             if (open_whitelist_enable & !open_whitelist.contains(event.getView().getTitle())) return;
             for (ItemStack itemStack : event.getPlayer().getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         Lore.update(itemStack, (Player) event.getPlayer());
                     }
                 }
@@ -64,7 +67,7 @@ public class Events implements Listener {
             user = YamlConfiguration.loadConfiguration(file);
             for (ItemStack itemStack : event.getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         if (!force_update) {
                             if (!user.getBoolean("enable")) {
                                 Lore.clear(itemStack);
@@ -87,7 +90,7 @@ public class Events implements Listener {
             if (close_whitelist_enable & !close_whitelist.contains(event.getView().getTitle())) return;
             for (ItemStack itemStack : event.getPlayer().getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         Lore.update(itemStack, (Player) event.getPlayer());
                     }
                 }
@@ -116,7 +119,7 @@ public class Events implements Listener {
             user = YamlConfiguration.loadConfiguration(file);
             for (ItemStack itemStack : event.getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         if (!force_update) {
                             if (!user.getBoolean("enable")) {
                                 Lore.clear(itemStack);
@@ -136,7 +139,7 @@ public class Events implements Listener {
     public void onPickup(EntityPickupItemEvent event) {
         if (!enable_pickup) return;
         ItemStack itemStack = event.getItem().getItemStack();
-        if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta() & event.getEntityType().equals(EntityType.PLAYER)) {
+        if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta() && event.getEntityType().equals(EntityType.PLAYER)) {
             Lore.update(itemStack, (Player) event.getEntity());
         }
     }
@@ -147,7 +150,7 @@ public class Events implements Listener {
         ItemStack itemStack = event.getPlayer().getInventory().getItem(event.getNewSlot());
         if (itemStack != null) {
             if (itemStack.toString().contains("AIR")) return;
-            if (itemStack.toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+            if (itemStack.toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
                 Lore.update(itemStack, event.getPlayer());
             }
         }
@@ -168,9 +171,22 @@ public class Events implements Listener {
                 connection.setRequestMethod("GET");
                 BufferedInputStream inputStream = new BufferedInputStream(connection.getInputStream());
                 Files.copy(inputStream, Paths.get(file.getPath()));
+                connection.disconnect();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    @EventHandler
+    public void onLogin(PlayerJoinEvent event) {
+        if (!check_update_enable || !check_update_notify_login) return;
+        if (!event.getPlayer().isOp() && !event.getPlayer().hasPermission("sbp.notify")) return;
+        String latest;
+        latest = Config.check();
+        if (latest == null) return;
+        if (!Objects.equals(latest, ShulkerBoxPreview.getDescription().getVersion())) {
+            event.getPlayer().sendMessage(String.format(check_update_notify_message, latest));
         }
     }
 }
