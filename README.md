@@ -25,4 +25,5 @@ Spigot: https://www.spigotmc.org/resources/shulkerboxpreview.105258/<br>
 # 🔓Permissions | 權限
 ```
 sbp.reload - 使用sbpreload的權限
+sbp.notify - 進入遊戲後獲取更新通知的權限
 ```

@@ -1,6 +1,6 @@
 name: ShulkerBoxPreview
 main: tech.ice.plugins.ShulkerBoxPreview.Main
-version: 1.2-SNAPSHOT
+version: 1.2
 author: YT_iceice
 commands:
   sbpreload:

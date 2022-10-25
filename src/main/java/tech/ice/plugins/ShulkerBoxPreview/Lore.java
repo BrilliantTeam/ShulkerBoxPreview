@@ -74,7 +74,7 @@ public class Lore {
             for (int i = 5; i < list.size(); i++) {
                 times++;
                 JsonObject nbt = list.get(i).getAsJsonObject();
-                boolean display = nbt.toString().contains("display") & nbt.toString().contains("Name") & nbt.toString().contains("text");
+                boolean display = nbt.toString().contains("display") && nbt.toString().contains("Name") && nbt.toString().contains("text") && nbt.getAsJsonObject("tag").getAsJsonObject("display").get("Name") != null;
                 if (nbt.get("id").toString().replace("\"", "").equals("minecraft:potion")) {
                     if (display) {
                         String initial = nbt.getAsJsonObject("tag").getAsJsonObject("display").get("Name").toString();

@@ -127,7 +127,6 @@ public class Config {
                 temp.set("whitelist.close.enable", close_whitelist_enable);
                 temp.set("whitelist.open.list", open_whitelist);
                 temp.set("whitelist.open.enable", open_whitelist_enable);
-                temp.set("config-version", 1.1);
                 temp.save(file);
             }
             case "1.1": {
@@ -160,7 +159,6 @@ public class Config {
                 temp.set("enable.when-close", enable_close);
                 temp.set("enable.pickup-item", enable_pickup);
                 temp.set("enable.held-item", enable_held);
-                temp.set("config-version", 1.2);
                 temp.save(file);
             }
         }
