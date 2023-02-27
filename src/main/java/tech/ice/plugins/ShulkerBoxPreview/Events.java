@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import java.net.HttpURLConnection;
@@ -157,7 +159,7 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void getLocal(PlayerLocaleChangeEvent event) {
+    public void onPlayerLocalChange(PlayerLocaleChangeEvent event) {
         String locale = event.getLocale().toLowerCase();
         File dir = new File(ShulkerBoxPreview.getDataFolder() + "/langs");
         File file = new File(ShulkerBoxPreview.getDataFolder() + "/langs/" + locale + ".json");
@@ -187,6 +189,36 @@ public class Events implements Listener {
         if (latest == null) return;
         if (!Objects.equals(latest, ShulkerBoxPreview.getDescription().getVersion())) {
             event.getPlayer().sendMessage(String.format(check_update_notify_message, latest));
+        }
+    }
+
+    @EventHandler
+    public void onServerLoad(ServerLoadEvent event) {
+        if (event.getType().equals(ServerLoadEvent.LoadType.STARTUP)) {
+            File dir = new File(ShulkerBoxPreview.getDataFolder() + "/langs");
+            String[] names = dir.list();
+            if (names == null) return;
+            for (String name : names) {
+                try {
+                    File file = new File(ShulkerBoxPreview.getDataFolder() + "/langs/" + name);
+                    if (file.length() == 0 && file.delete()) break;
+                    URL url = new URL(lang_lib + "/" + file);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    if (connection.getResponseCode() != 200 && file.delete()) break;
+                    BufferedInputStream inputStream1 = new BufferedInputStream(new FileInputStream(file));
+                    BufferedInputStream inputStream2 = new BufferedInputStream(connection.getInputStream());
+                    int data;
+                    while ((data = inputStream1.read()) != -1) {
+                        if (data != inputStream2.read()) {
+                            inputStream1.close();
+                            if (file.delete()) break;
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 }

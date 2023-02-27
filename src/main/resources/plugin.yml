@@ -1,7 +1,7 @@
-name: ShulkerBoxPreview
+name: ${project.name}
 main: tech.ice.plugins.ShulkerBoxPreview.Main
-version: 1.2
-author: YT_iceice
+version: ${project.version}
+author: Koyorice_
 commands:
   sbpreload:
     description: 重新讀取所有配置檔案

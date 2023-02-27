@@ -65,7 +65,9 @@ public class Lore {
             }
             JsonObject locale = new Gson().fromJson(new InputStreamReader(is), JsonObject.class);
             ItemMeta meta = itemStack.getItemMeta();
-            if (meta == null || !meta.getAsString().contains("BlockEntityTag") || !meta.getAsString().contains("Items")) return;
+            if (meta == null) return;
+            if (meta.hasLore()) Lore.clear(itemStack);
+            if (!meta.getAsString().contains("BlockEntityTag") || !meta.getAsString().contains("Items")) return;
             JsonArray list = new Gson().fromJson(meta.getAsString(), JsonObject.class).getAsJsonObject("BlockEntityTag").getAsJsonArray("Items");
             if (list == null) return;
             int lines = 0;
