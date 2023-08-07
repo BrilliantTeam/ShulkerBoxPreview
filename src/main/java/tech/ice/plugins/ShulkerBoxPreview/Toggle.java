@@ -3,6 +3,7 @@ package tech.ice.plugins.ShulkerBoxPreview;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -10,12 +11,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
 import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
 
-public class Toggle implements CommandExecutor {
+public class Toggle implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -36,7 +39,7 @@ public class Toggle implements CommandExecutor {
         if (!dir.exists()) {
             dir.mkdir();
         }
-        File file = new File(path + sender.getServer().getOfflinePlayer(sender.getName()).getUniqueId() + ".yml");
+        File file = new File(path + ((Player) sender).getUniqueId() + ".yml");
         FileConfiguration user;
         if (!file.exists()) {
             try {
@@ -61,9 +64,9 @@ public class Toggle implements CommandExecutor {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            for (ItemStack itemStack : Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())).getInventory()) {
+            for (ItemStack itemStack : ((Player) sender).getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         Lore.update(itemStack, Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())));
                     }
                 }
@@ -80,9 +83,9 @@ public class Toggle implements CommandExecutor {
                 throw new RuntimeException(e);
             }
             if (force_update) {
-                for (ItemStack itemStack : Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())).getInventory()) {
+                for (ItemStack itemStack : ((Player) sender).getInventory()) {
                     if (itemStack != null) {
-                        if (itemStack.getType().toString().contains("SHULKER_BOX") & itemStack.hasItemMeta()) {
+                        if (itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta()) {
                             Lore.update(itemStack, Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())));
                         }
                     }
@@ -92,5 +95,15 @@ public class Toggle implements CommandExecutor {
             return true;
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+        List<String> tabs = new ArrayList<>();
+        if (args.length == 1) {
+            tabs.add("on");
+            tabs.add("off");
+        }
+        return tabs;
     }
 }

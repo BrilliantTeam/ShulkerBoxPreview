@@ -24,9 +24,9 @@ messages:
   # 預覽顯示格式
   format:
     # %1s 為物品命名名稱 , %2s 為物品名稱 [例如: 命名石頭 (石頭)]
-    display-item: §f%1s (%2s)
+    display-item: §f%1$s (%2$s)
     # %1s 為物品命名名稱 , %2s 為物品名稱 , %d 為數量 [例如: 命名石頭 (石頭) x64]
-    display-items: §f%1s (%2s) x%d
+    display-items: §f%1$s (%2$s) x%3$d
     # %s 為物品名稱 [例如: 石頭]
     item: §f%s
     # %s 為物品名稱 , %d 為數量 [例如: 石頭 x64]
@@ -63,6 +63,7 @@ whitelist:
     list:
       - Shulker Box
       - Chest
+      - Large Chest
       - Brewing Stand
       - Minecart with Hopper
       - Minecart with Chest
@@ -71,6 +72,7 @@ whitelist:
       - Dispenser
       - Dropper
       - Furnace
+      - Crafting
   # 假設你新增了 "123"，那麼名稱為 123 的界面就會在開啟時更新預覽文字
   close:
     enable: true
@@ -78,6 +80,7 @@ whitelist:
     list:
       - Shulker Box
       - Chest
+      - Large Chest
       - Brewing Stand
       - Minecart with Hopper
       - Minecart with Chest
@@ -86,6 +89,7 @@ whitelist:
       - Dispenser
       - Dropper
       - Furnace
+      - Crafting
 # 假設你新增了 "123"，那麼名稱為 123 的界面就會在關閉時更新預覽文字
 
 # 是否讓玩家能夠調整是否顯示界伏盒預覽 (/sbppreview)

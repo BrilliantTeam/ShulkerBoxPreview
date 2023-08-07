@@ -1,11 +1,13 @@
 package tech.ice.plugins.ShulkerBoxPreview;
 
+import com.google.gson.JsonObject;
 import org.bstats.bukkit.Metrics;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
@@ -13,6 +15,7 @@ import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
 public class Main extends JavaPlugin {
 
     public static Main ShulkerBoxPreview;
+    public static HashMap<String, JsonObject> langs = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -27,7 +30,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Events(), this);
         getServer().getPluginCommand("sbpreload").setExecutor(new Reload());
         getServer().getPluginCommand("sbppreview").setExecutor(new Toggle());
-        getServer().getPluginCommand("sbppreview").setTabCompleter(new TabToggle());
+        getServer().getPluginCommand("sbppreview").setTabCompleter(new Toggle());
         if (!check_update_enable || !check_update_notify_startup) return;
         String latest;
         latest = Config.check();

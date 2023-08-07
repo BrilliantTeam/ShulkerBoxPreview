@@ -1,7 +1,8 @@
 package tech.ice.plugins.ShulkerBoxPreview;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.bukkit.Material;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
@@ -18,6 +19,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.DataInputStream;
+import java.io.InputStreamReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.net.HttpURLConnection;
@@ -26,6 +30,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
@@ -37,47 +42,17 @@ public class Events implements Listener {
     public void onOpen(InventoryOpenEvent event) {
         if (!enable_open) return;
         if (event.getPlayer() instanceof Player) {
-            if (open_whitelist_enable & !open_whitelist.contains(event.getView().getTitle())) return;
+            if (open_whitelist_enable && !open_whitelist.contains(event.getView().getTitle())) return;
             for (ItemStack itemStack : event.getPlayer().getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         Lore.update(itemStack, (Player) event.getPlayer());
                     }
                 }
             }
-            String path = ShulkerBoxPreview.getDataFolder() + "/users/";
-            File dir = new File(path);
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            File file = new File(path + event.getPlayer().getUniqueId() + ".yml");
-            FileConfiguration user;
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                user = YamlConfiguration.loadConfiguration(file);
-                user.set("enable", default_enable);
-                try {
-                    user.save(file);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            user = YamlConfiguration.loadConfiguration(file);
             for (ItemStack itemStack : event.getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
-                        if (!force_update) {
-                            if (!user.getBoolean("enable")) {
-                                Lore.clear(itemStack);
-                            } else {
-                                Lore.update(itemStack, (Player) event.getPlayer());
-                            }
-                            return;
-                        }
+                    if (itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         Lore.update(itemStack, (Player) event.getPlayer());
                     }
                 }
@@ -89,47 +64,17 @@ public class Events implements Listener {
     public void onClose(InventoryCloseEvent event) {
         if (!enable_close) return;
         if (event.getPlayer() instanceof Player) {
-            if (close_whitelist_enable & !close_whitelist.contains(event.getView().getTitle())) return;
+            if (close_whitelist_enable && !close_whitelist.contains(event.getView().getTitle())) return;
             for (ItemStack itemStack : event.getPlayer().getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
+                    if (itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         Lore.update(itemStack, (Player) event.getPlayer());
                     }
                 }
             }
-            String path = ShulkerBoxPreview.getDataFolder() + "/users/";
-            File dir = new File(path);
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            File file = new File(path + event.getPlayer().getUniqueId() + ".yml");
-            FileConfiguration user;
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                user = YamlConfiguration.loadConfiguration(file);
-                user.set("enable", default_enable);
-                try {
-                    user.save(file);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            user = YamlConfiguration.loadConfiguration(file);
             for (ItemStack itemStack : event.getInventory()) {
                 if (itemStack != null) {
-                    if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
-                        if (!force_update) {
-                            if (!user.getBoolean("enable")) {
-                                Lore.clear(itemStack);
-                            } else {
-                                Lore.update(itemStack, (Player) event.getPlayer());
-                            }
-                            return;
-                        }
+                    if (itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta()) {
                         Lore.update(itemStack, (Player) event.getPlayer());
                     }
                 }
@@ -141,7 +86,7 @@ public class Events implements Listener {
     public void onPickup(EntityPickupItemEvent event) {
         if (!enable_pickup) return;
         ItemStack itemStack = event.getItem().getItemStack();
-        if (itemStack.getType().toString().contains("SHULKER_BOX") && itemStack.hasItemMeta() && event.getEntityType().equals(EntityType.PLAYER)) {
+        if (itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta() && event.getEntityType().equals(EntityType.PLAYER)) {
             Lore.update(itemStack, (Player) event.getEntity());
         }
     }
@@ -150,11 +95,8 @@ public class Events implements Listener {
     public void onHeld(PlayerItemHeldEvent event) {
         if (!enable_held) return;
         ItemStack itemStack = event.getPlayer().getInventory().getItem(event.getNewSlot());
-        if (itemStack != null) {
-            if (itemStack.toString().contains("AIR")) return;
-            if (itemStack.toString().contains("SHULKER_BOX") && itemStack.hasItemMeta()) {
-                Lore.update(itemStack, event.getPlayer());
-            }
+        if (itemStack != null && !itemStack.getType().equals(Material.AIR) && itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta()) {
+            Lore.update(itemStack, event.getPlayer());
         }
     }
 
@@ -175,6 +117,13 @@ public class Events implements Listener {
                 Files.copy(inputStream, Paths.get(file.getPath()));
                 connection.disconnect();
             } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (!Main.langs.containsKey(locale)) {
+            try {
+                Main.langs.put(locale, new Gson().fromJson(new InputStreamReader(new DataInputStream(new FileInputStream(file))), JsonObject.class));
+            } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -212,7 +161,8 @@ public class Events implements Listener {
                     while ((data = inputStream1.read()) != -1) {
                         if (data != inputStream2.read()) {
                             inputStream1.close();
-                            if (file.delete()) break;
+                            Files.copy(inputStream2, Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+                            break;
                         }
                     }
                 } catch (IOException e) {

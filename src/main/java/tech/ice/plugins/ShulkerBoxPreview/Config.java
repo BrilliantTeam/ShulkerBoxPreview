@@ -77,9 +77,9 @@ public class Config {
         first_per_n_line = config.getString("messages.first-per-n-line", "  ");
         reload = config.getString("messages.command.reload", "§b已重新讀取所有配置檔");
         no_per = config.getString("messages.command.no-per", "§b已重新讀取所有配置檔案");
-        format_display_item = config.getString("messages.format.display-item", "§f%1s (%2s)");
+        format_display_item = config.getString("messages.format.display-item", "§f%1$s (%2$s)");
         format_item = config.getString("messages.format.item", "§f%s");
-        format_display_items = config.getString("messages.format.display-items", "§f%1s (%2s) x%d");
+        format_display_items = config.getString("messages.format.display-items", "§f%1$s (%2$s) x%3$d");
         format_items = config.getString("messages.format.items", "§f%s x%d");
         lang_lib = config.getString("lang_lib", "https://raw.githubusercontent.com/YTiceice/LangLib/main/lang");
         close_whitelist = config.getStringList("whitelist.close.list");

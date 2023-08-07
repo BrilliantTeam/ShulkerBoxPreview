@@ -7,17 +7,12 @@ import com.google.gson.JsonObject;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,17 +48,10 @@ public class Lore {
             }
         }
         user = YamlConfiguration.loadConfiguration(data);
-        if (force_update & !user.getBoolean("enable")) {
+        if (force_update && !user.getBoolean("enable")) {
             Lore.clear(itemStack);
         } else {
-            File file = new File(ShulkerBoxPreview.getDataFolder() + "/langs/" + player.getLocale().toLowerCase() + ".json");
-            InputStream is;
-            try {
-                is = new DataInputStream(new FileInputStream(file));
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            JsonObject locale = new Gson().fromJson(new InputStreamReader(is), JsonObject.class);
+            JsonObject locale = Main.langs.get(player.getLocale().toLowerCase());
             ItemMeta meta = itemStack.getItemMeta();
             if (meta == null) return;
             if (meta.hasLore()) Lore.clear(itemStack);
@@ -73,35 +61,34 @@ public class Lore {
             int lines = 0;
             int times = 0;
             List<String> lore = new ArrayList<>();
-            for (int i = 5; i < list.size(); i++) {
+            for (int i = 0; i < list.size(); i++) {
                 times++;
                 JsonObject nbt = list.get(i).getAsJsonObject();
                 boolean display = nbt.toString().contains("display") && nbt.toString().contains("Name") && nbt.toString().contains("text") && nbt.getAsJsonObject("tag").getAsJsonObject("display").get("Name") != null;
-                if (nbt.get("id").toString().replace("\"", "").equals("minecraft:potion")) {
+                if (nbt.get("id").getAsString().equals("minecraft:potion")) {
                     if (display) {
-                        String initial = nbt.getAsJsonObject("tag").getAsJsonObject("display").get("Name").toString();
-                        String json = initial.substring(1, initial.length() -1).replace("\\", "");
+                        String json = nbt.getAsJsonObject("tag").getAsJsonObject("display").get("Name").getAsString();
                         StringBuilder tag = new StringBuilder();
-                        if (json.startsWith("[") & json.endsWith("]")) {
+                        if (json.startsWith("[") && json.endsWith("]")) {
                             JsonArray jsonArray = new Gson().fromJson(json, JsonArray.class);
                             for (int tags = 0; tags < jsonArray.size(); tags++) {
                                 JsonObject jsonObject = new Gson().fromJson(jsonArray.get(tags).toString(), JsonObject.class);
                                 tag.append(jsonObject.get("text").toString(), 1, jsonObject.get("text").toString().length() - 1);
                             }
-                        } else if ((new Gson().fromJson(json.replace("\\", ""), JsonObject.class)).has("extra")) {
-                            JsonObject jsonObject = new Gson().fromJson(json.replace("\\", ""), JsonObject.class);
+                        } else if ((new Gson().fromJson(json, JsonObject.class)).has("extra")) {
+                            JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
                             tag.append(jsonObject.get("text").toString(), 1, jsonObject.get("text").toString().length() - 1);
                             JsonArray jsonArray = new Gson().fromJson(jsonObject.get("extra").toString(), JsonArray.class);
                             for (int tags = 0; tags < jsonArray.size(); tags++) {
                                 jsonObject = new Gson().fromJson(jsonArray.get(tags).toString(), JsonObject.class);
                                 tag.append(jsonObject.get("text").toString(), 1, jsonObject.get("text").toString().length() - 1);
                             }
-                        } else if (json.startsWith("{") & json.endsWith("}")) {
+                        } else if (json.startsWith("{") && json.endsWith("}")) {
                             JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
                             tag.append(jsonObject.get("text").toString(), 1, jsonObject.get("text").toString().length() - 1);
                         }
-                        if (nbt.get("Count").toString().replace("\"", "").replace("b", "").equals("1")) {
-                            String item = nbt.get("id").toString().replace("\"", "") + ".effect." + nbt.getAsJsonObject("tag").get("Potion").toString().replace("\"", "").replace("minecraft:", "").replace("strong_", "").replace("long_", "");
+                        if (nbt.get("Count").getAsString().replace("b", "").equals("1")) {
+                            String item = nbt.get("id").getAsString() + ".effect." + nbt.getAsJsonObject("tag").get("Potion").getAsString().replace("minecraft:", "").replace("strong_", "").replace("long_", "");
                             String str;
                             if (locale.get(item) != null) {
                                 str = locale.get(item).toString();
@@ -119,14 +106,14 @@ public class Lore {
                                 times = 1;
                             }
                         } else {
-                            String item = nbt.get("id").toString().replace("\"", "") + ".effect." + nbt.getAsJsonObject("tag").get("Potion").toString().replace("\"", "").substring(1, nbt.get("Potion").toString().length() -1).replace("minecraft:", "").replace("strong_", "").replace("long_", "");
+                            String item = nbt.get("id").getAsString() + ".effect." + nbt.getAsJsonObject("tag").get("Potion").getAsString().substring(1, nbt.get("Potion").toString().length() -1).replace("minecraft:", "").replace("strong_", "").replace("long_", "");
                             String str;
                             if (locale.get(item) != null) {
                                 str = locale.get(item).toString();
                             } else {
                                 str = locale.get("argument.id.invalid").toString();
                             }
-                            String msg = String.format(format_display_items, tag, str.substring(1, str.length() - 1), Integer.parseInt(nbt.get("Count").toString().replace("b", "").replace("\"", "")));
+                            String msg = String.format(format_display_items, tag, str.substring(1, str.length() - 1), Integer.parseInt(nbt.get("Count").getAsString().replace("b", "")));
                             if (lore.size() == 0) {
                                 lore.add(first_per_n_line + msg);
                             } else if (times <= item_per_n_line) {
@@ -138,8 +125,8 @@ public class Lore {
                             }
                         }
                     } else {
-                        if (nbt.get("Count").toString().replace("\"", "").replace("b", "").replace("\"", "").equals("1")) {
-                            String item = nbt.get("id").toString().replace("\"", "") + ".effect." + nbt.getAsJsonObject("tag").get("Potion").toString().replace("\"", "").replace("minecraft:", "").replace("strong_", "").replace("long_", "");
+                        if (nbt.get("Count").getAsString().replace("b", "").equals("1")) {
+                            String item = nbt.get("id").getAsString() + ".effect." + nbt.getAsJsonObject("tag").get("Potion").getAsString().replace("minecraft:", "").replace("strong_", "").replace("long_", "");
                             String str;
                             if (locale.get(item) != null) {
                                 str = locale.get(item).toString();
@@ -157,14 +144,14 @@ public class Lore {
                                 times = 1;
                             }
                         } else {
-                            String item = nbt.get("id").toString().replace("\"", "") + ".effect." + nbt.getAsJsonObject("tag").get("Potion").toString().replace("\"", "").replace("minecraft:", "").replace("strong_", "").replace("long_", "");
+                            String item = nbt.get("id").getAsString() + ".effect." + nbt.getAsJsonObject("tag").get("Potion").getAsString().replace("minecraft:", "").replace("strong_", "").replace("long_", "");
                             String str;
                             if (locale.get(item) != null) {
                                 str = locale.get(item).toString();
                             } else {
                                 str = locale.get("argument.id.invalid").toString();
                             }
-                            String msg = String.format(format_items, str.substring(1, str.length() - 1), Integer.parseInt(nbt.get("Count").toString().replace("b", "").replace("\"", "")));
+                            String msg = String.format(format_items, str.substring(1, str.length() - 1), Integer.parseInt(nbt.get("Count").getAsString().replace("b", "")));
                             if (lore.size() == 0) {
                                 lore.add(first_per_n_line + msg);
                             } else if (times <= item_per_n_line) {
@@ -177,29 +164,28 @@ public class Lore {
                         }
                     }
                 } else if (display) {
-                    String initial = nbt.getAsJsonObject("tag").getAsJsonObject("display").get("Name").toString();
-                    String json = initial.substring(1, initial.length() -1).replace("\\", "");
+                    String json = nbt.getAsJsonObject("tag").getAsJsonObject("display").get("Name").getAsString();
                     StringBuilder tag = new StringBuilder();
-                    if (json.startsWith("[") & json.endsWith("]")) {
+                    if (json.startsWith("[") && json.endsWith("]")) {
                         JsonArray jsonArray = new Gson().fromJson(json, JsonArray.class);
                         for (int tags = 0; tags < jsonArray.size(); tags++) {
                             JsonObject jsonObject = new Gson().fromJson(jsonArray.get(tags).toString(), JsonObject.class);
                             tag.append(jsonObject.get("text").toString(), 1, jsonObject.get("text").toString().length() - 1);
                         }
-                    } else if ((new Gson().fromJson(json.replace("\\", ""), JsonObject.class)).has("extra")) {
-                        JsonObject jsonObject = new Gson().fromJson(json.replace("\\", ""), JsonObject.class);
+                    } else if ((new Gson().fromJson(json, JsonObject.class)).has("extra")) {
+                        JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
                         tag.append(jsonObject.get("text").toString(), 1, jsonObject.get("text").toString().length() - 1);
                         JsonArray jsonArray = new Gson().fromJson(jsonObject.get("extra").toString(), JsonArray.class);
                         for (int tags = 0; tags < jsonArray.size(); tags++) {
                             jsonObject = new Gson().fromJson(jsonArray.get(tags).toString(), JsonObject.class);
                             tag.append(jsonObject.get("text").toString(), 1, jsonObject.get("text").toString().length() - 1);
                         }
-                    } else if (json.startsWith("{") & json.endsWith("}")) {
+                    } else if (json.startsWith("{") && json.endsWith("}")) {
                         JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
                         tag.append(jsonObject.get("text").toString(), 1, jsonObject.get("text").toString().length() - 1);
                     }
-                    if (nbt.get("Count").toString().replace("\"", "").replace("b", "").equals("1")) {
-                        String item = (nbt.get("id").toString().replace("\"", ""));
+                    if (nbt.get("Count").getAsString().replace("b", "").equals("1")) {
+                        String item = (nbt.get("id").getAsString());
                         String str;
                         if (locale.get(item) != null) {
                             str = locale.get(item).toString();
@@ -217,14 +203,14 @@ public class Lore {
                             times = 1;
                         }
                     } else {
-                        String item = (nbt.get("id").toString().replace("\"", ""));
+                        String item = (nbt.get("id").getAsString());
                         String str;
                         if (locale.get(item) != null) {
                             str = locale.get(item).toString();
                         } else {
                             str = locale.get("argument.id.invalid").toString();
                         }
-                        String msg = String.format(format_display_items, tag, str.substring(1, str.length() - 1), Integer.parseInt(nbt.get("Count").toString().replace("b", "").replace("\"", "")));
+                        String msg = String.format(format_display_items, tag, str.substring(1, str.length() - 1), Integer.parseInt(nbt.get("Count").getAsString().replace("b", "")));
                         if (lore.size() == 0) {
                             lore.add(first_per_n_line + msg);
                         } else if (times <= item_per_n_line) {
@@ -236,8 +222,8 @@ public class Lore {
                         }
                     }
                 } else {
-                    if (Objects.equals(nbt.get("Count").toString().replace("\"", ""), "1b")) {
-                        String item = (nbt.get("id").toString().replace("\"", ""));
+                    if (Objects.equals(nbt.get("Count").getAsString(), "1b")) {
+                        String item = (nbt.get("id").getAsString());
                         String str;
                         if (locale.get(item) != null) {
                             str = locale.get(item).toString();
@@ -255,14 +241,14 @@ public class Lore {
                             times = 1;
                         }
                     } else {
-                        String item = (nbt.get("id").toString().replace("\"", ""));
+                        String item = (nbt.get("id").getAsString());
                         String str;
                         if (locale.get(item) != null) {
                             str = locale.get(item).toString();
                         } else {
                             str = locale.get("argument.id.invalid").toString();
                         }
-                        String msg = String.format(format_items, str.substring(1, str.length() - 1), Integer.parseInt(nbt.get("Count").toString().replace("b", "").replace("\"", "")));
+                        String msg = String.format(format_items, str.substring(1, str.length() - 1), Integer.parseInt(nbt.get("Count").getAsString().replace("b", "")));
                         if (lore.size() == 0) {
                             lore.add(first_per_n_line + msg);
                         } else if (times <= item_per_n_line) {
@@ -276,6 +262,7 @@ public class Lore {
                 }
             }
             meta.setLore(lore);
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             itemStack.setItemMeta(meta);
         }
     }

@@ -1,6 +1,7 @@
 name: ${project.name}
 main: tech.ice.plugins.ShulkerBoxPreview.Main
 version: ${project.version}
+api-version: 1.20
 author: Koyorice_
 commands:
   sbpreload:
