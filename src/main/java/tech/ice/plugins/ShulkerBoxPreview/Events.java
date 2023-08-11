@@ -16,12 +16,10 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.DataInputStream;
 import java.io.InputStreamReader;
-import java.io.FileNotFoundException;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 
 import java.net.HttpURLConnection;
@@ -39,7 +37,7 @@ import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
 public class Events implements Listener {
 
     @EventHandler
-    public void onOpen(InventoryOpenEvent event) {
+    public void onInventoryOpen(InventoryOpenEvent event) {
         if (!enable_open) return;
         if (event.getPlayer() instanceof Player) {
             if (open_whitelist_enable && !open_whitelist.contains(event.getView().getTitle())) return;
@@ -61,7 +59,7 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void onClose(InventoryCloseEvent event) {
+    public void onInventoryClose(InventoryCloseEvent event) {
         if (!enable_close) return;
         if (event.getPlayer() instanceof Player) {
             if (close_whitelist_enable && !close_whitelist.contains(event.getView().getTitle())) return;
@@ -83,7 +81,7 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void onPickup(EntityPickupItemEvent event) {
+    public void onEntityPickupItem(EntityPickupItemEvent event) {
         if (!enable_pickup) return;
         ItemStack itemStack = event.getItem().getItemStack();
         if (itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta() && event.getEntityType().equals(EntityType.PLAYER)) {
@@ -92,7 +90,7 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void onHeld(PlayerItemHeldEvent event) {
+    public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         if (!enable_held) return;
         ItemStack itemStack = event.getPlayer().getInventory().getItem(event.getNewSlot());
         if (itemStack != null && !itemStack.getType().equals(Material.AIR) && itemStack.getType().toString().endsWith("SHULKER_BOX") && itemStack.hasItemMeta()) {
@@ -111,26 +109,16 @@ public class Events implements Listener {
         if (!file.exists()) {
             try {
                 URL url = new URL(lang_lib + "/" + locale + ".json");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                BufferedInputStream inputStream = new BufferedInputStream(connection.getInputStream());
-                Files.copy(inputStream, Paths.get(file.getPath()));
-                connection.disconnect();
+                Files.copy(url.openStream(), Paths.get(file.getPath()));
+                Main.langs.put(locale, new Gson().fromJson(new InputStreamReader(url.openStream()), JsonObject.class));
             } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if (!Main.langs.containsKey(locale)) {
-            try {
-                Main.langs.put(locale, new Gson().fromJson(new InputStreamReader(new DataInputStream(new FileInputStream(file))), JsonObject.class));
-            } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
     @EventHandler
-    public void onLogin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         if (!check_update_enable || !check_update_notify_login) return;
         if (!event.getPlayer().isOp() && !event.getPlayer().hasPermission("sbp.notify")) return;
         String latest;
@@ -144,27 +132,26 @@ public class Events implements Listener {
     @EventHandler
     public void onServerLoad(ServerLoadEvent event) {
         if (event.getType().equals(ServerLoadEvent.LoadType.STARTUP)) {
-            File dir = new File(ShulkerBoxPreview.getDataFolder() + "/langs");
+            File dir = new File(ShulkerBoxPreview.getDataFolder() + "/langs/");
             String[] names = dir.list();
             if (names == null) return;
             for (String name : names) {
                 try {
                     File file = new File(ShulkerBoxPreview.getDataFolder() + "/langs/" + name);
                     if (file.length() == 0 && file.delete()) break;
-                    URL url = new URL(lang_lib + "/" + file);
+                    URL url = new URL(lang_lib + "/" + name);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
                     if (connection.getResponseCode() != 200 && file.delete()) break;
                     BufferedInputStream inputStream1 = new BufferedInputStream(new FileInputStream(file));
                     BufferedInputStream inputStream2 = new BufferedInputStream(connection.getInputStream());
                     int data;
                     while ((data = inputStream1.read()) != -1) {
                         if (data != inputStream2.read()) {
-                            inputStream1.close();
-                            Files.copy(inputStream2, Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+                            Files.copy(url.openStream(), Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
                             break;
                         }
                     }
+                    Main.langs.put(name.replace(".json", ""), new Gson().fromJson(new InputStreamReader(url.openStream()), JsonObject.class));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

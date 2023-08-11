@@ -81,7 +81,7 @@ public class Config {
         format_item = config.getString("messages.format.item", "§f%s");
         format_display_items = config.getString("messages.format.display-items", "§f%1$s (%2$s) x%3$d");
         format_items = config.getString("messages.format.items", "§f%s x%d");
-        lang_lib = config.getString("lang_lib", "https://raw.githubusercontent.com/YTiceice/LangLib/main/lang");
+        lang_lib = config.getString("lang_lib", "https://raw.githubusercontent.com/YTiceice/LangLib/main");
         close_whitelist = config.getStringList("whitelist.close.list");
         close_whitelist_enable = config.getBoolean("whitelist.close.enable", true);
         open_whitelist = config.getStringList("whitelist.open.list");
@@ -158,6 +158,12 @@ public class Config {
                 temp.set("enable.when-close", enable_close);
                 temp.set("enable.pickup-item", enable_pickup);
                 temp.set("enable.held-item", enable_held);
+                temp.save(file);
+            }
+            case "1.2": {
+                FileConfiguration temp = YamlConfiguration.loadConfiguration(file);
+                temp.set("config-version", 1.3);
+                temp.set("lang_lib", "https://raw.githubusercontent.com/YTiceice/LangLib/main");
                 temp.save(file);
             }
         }
