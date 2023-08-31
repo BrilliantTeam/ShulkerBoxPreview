@@ -3,16 +3,9 @@ package tech.ice.plugins.ShulkerBoxPreview;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import java.util.List;
 
 import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
@@ -49,6 +42,7 @@ public class Config {
     public static boolean check_update_notify_startup;
     public static boolean check_update_notify_login;
     public static String check_update_notify_message;
+    public static boolean client_language;
 
     public static void load() throws IOException {
 
@@ -70,6 +64,7 @@ public class Config {
             FileOutputStream outputStream = new FileOutputStream(file);
             InputStream in = ShulkerBoxPreview.getResource("config.yml");
             in.transferTo(outputStream);
+            config = YamlConfiguration.loadConfiguration(file);
         }
         version = config.getString("config-version");
         item_per_n_line = config.getInt("messages.item-per-n-line", 4);
@@ -102,6 +97,8 @@ public class Config {
         check_update_notify_startup = config.getBoolean("check_update.notify.startup", true);
         check_update_notify_login = config.getBoolean("check_update.notify.login", true);
         check_update_notify_message = config.getString("check_update.notify.message", "§bShulkerBoxPreview 已推出 %s, 請在此下載更新:§6https://www.spigotmc.org/resources/shulkerboxpreview.105258");
+        client_language = config.getBoolean("client-language", true);
+        update(file, version);
     }
 
     private static void update(File file, String version) throws IOException {
@@ -164,6 +161,12 @@ public class Config {
                 FileConfiguration temp = YamlConfiguration.loadConfiguration(file);
                 temp.set("config-version", 1.3);
                 temp.set("lang_lib", "https://raw.githubusercontent.com/YTiceice/LangLib/main");
+                temp.save(file);
+            }
+            case "1.3": {
+                FileConfiguration temp = YamlConfiguration.loadConfiguration(file);
+                temp.set("config-version", 1.4);
+                temp.set("client-language", client_language);
                 temp.save(file);
             }
         }
