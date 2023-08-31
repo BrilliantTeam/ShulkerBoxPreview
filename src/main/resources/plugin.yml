@@ -1,8 +1,8 @@
 name: ${project.name}
 main: tech.ice.plugins.ShulkerBoxPreview.Main
 version: ${project.version}
-api-version: 1.20
-author: Koyorice_
+api-version: 1.17
+author: [ Koyorice_, TangJin ]
 commands:
   sbpreload:
     description: 重新讀取所有配置檔案
