@@ -194,7 +194,7 @@ public class Config {
                 temp.set("enable.pickup-item", enable_pickup);
                 temp.set("enable.held-item", enable_held);
                 temp.set("check_update.enable", check_update_enable);
-                temp.set("check_update.notify.startup", check_update_notify_startup;
+                temp.set("check_update.notify.startup", check_update_notify_startup);
                 temp.set("check_update.notify.login", check_update_notify_login);
                 temp.set("check_update.notify.message", check_update_notify_message);
                 temp.save(file);
