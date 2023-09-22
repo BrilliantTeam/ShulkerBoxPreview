@@ -105,7 +105,7 @@ public class Lore {
                     times = 1;
                 }
             }
-//            System.out.println(lore);
+
             itemStack.setItemMeta(TJImplementation.asLoreSet(itemStack, lore).getItemMeta());
             return;
         }
