@@ -70,6 +70,7 @@ public class Lore {
             String cachedFormat = "";
             for (ItemStack item : inventory) {
                 if (item == null) continue;
+                if (item.getItemMeta() == null) continue;
                 times++;
 
                 if (lore.isEmpty()) cachedFormat = ComponentProcessor.refreshFormat(cachedFormat + first_per_n_line);
@@ -79,9 +80,9 @@ public class Lore {
                     cachedFormat = ComponentProcessor.refreshFormat(cachedFormat + first_per_n_line);
 
                 String msg;
-                String toSplit = meta.hasDisplayName() ? "%2\\$s" : "%s";
-                if (meta.hasDisplayName())
-                    msg = item.getAmount() == 1 ? String.format(format_display_item, meta.getDisplayName(), "%2$s") : String.format(format_display_items, meta.getDisplayName(), "%2$s", item.getAmount());
+                String toSplit = item.getItemMeta().hasDisplayName() ? "%2\\$s" : "%s";
+                if (item.getItemMeta().hasDisplayName())
+                    msg = item.getAmount() == 1 ? String.format(format_display_item, item.getItemMeta().getDisplayName(), "%2$s") : String.format(format_display_items, item.getItemMeta().getDisplayName(), "%2$s", item.getAmount());
                 else msg = item.getAmount() == 1 ? format_item : String.format(format_items, "%s", item.getAmount());
 
                 BaseComponent component = new TextComponent();
@@ -106,7 +107,10 @@ public class Lore {
                 }
             }
 
-            itemStack.setItemMeta(TJImplementation.asLoreSet(itemStack, lore).getItemMeta());
+            ItemMeta new_ = TJImplementation.asLoreSet(itemStack, lore).getItemMeta();
+            assert new_ != null;
+            new_.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            itemStack.setItemMeta(new_);
             return;
         }
         List<String> lore = new ArrayList<>();
@@ -114,6 +118,7 @@ public class Lore {
 
         for (ItemStack item : inventory) {
             if (item == null) continue;
+            if (item.getItemMeta() == null) continue;
             times++;
 
             String str;
@@ -122,8 +127,8 @@ public class Lore {
             else str = locale.get("argument.id.invalid").getAsString();
 
             String msg;
-            if (meta.hasDisplayName())
-                msg = item.getAmount() == 1 ? String.format(format_display_item, meta.getDisplayName(), str) : String.format(format_display_items, meta.getDisplayName(), str, item.getAmount());
+            if (item.getItemMeta().hasDisplayName())
+                msg = item.getAmount() == 1 ? String.format(format_display_item, item.getItemMeta().getDisplayName(), str) : String.format(format_display_items, item.getItemMeta().getDisplayName(), str, item.getAmount());
             else
                 msg = item.getAmount() == 1 ? String.format(format_item, str) : String.format(format_items, str, item.getAmount());
 
