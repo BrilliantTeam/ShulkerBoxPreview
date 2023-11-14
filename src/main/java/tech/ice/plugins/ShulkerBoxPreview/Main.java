@@ -66,10 +66,12 @@ public class Main extends JavaPlugin {
                 BufferedInputStream inputStream1 = new BufferedInputStream(new FileInputStream(file));
                 BufferedInputStream inputStream2 = new BufferedInputStream(connection.getInputStream());
                 int data;
-                while ((data = inputStream1.read()) != -1) {
-                    if (data != inputStream2.read()) {
-                        Files.copy(url.openStream(), Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
-                        break;
+                if (auto_update) {
+                    while ((data = inputStream1.read()) != -1) {
+                        if (data != inputStream2.read()) {
+                            Files.copy(url.openStream(), Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+                            break;
+                        }
                     }
                 }
                 Main.langs.put(name.replace(".json", ""), new Gson().fromJson(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8), JsonObject.class));

@@ -43,6 +43,7 @@ public class Config {
     public static boolean check_update_notify_login;
     public static String check_update_notify_message;
     public static boolean client_language;
+    public static boolean auto_update;
 
     public static void load() throws IOException {
 
@@ -59,14 +60,19 @@ public class Config {
         }
 
         config = YamlConfiguration.loadConfiguration(file);
-        if (config.get("config-version") == null) {
+        version = config.getString("config-version");
+
+        if (version == null) {
             file.delete();
             FileOutputStream outputStream = new FileOutputStream(file);
             InputStream in = ShulkerBoxPreview.getResource("config.yml");
             in.transferTo(outputStream);
             config = YamlConfiguration.loadConfiguration(file);
+            version = config.getString("config-version");
+        } else {
+            update(file, version);
         }
-        version = config.getString("config-version");
+
         item_per_n_line = config.getInt("messages.item-per-n-line", 4);
         item_per_n_append = config.getString("messages.item-per-n-append", " , ");
         first_per_n_line = config.getString("messages.first-per-n-line", "  ");
@@ -81,7 +87,6 @@ public class Config {
         close_whitelist_enable = config.getBoolean("whitelist.close.enable", true);
         open_whitelist = config.getStringList("whitelist.open.list");
         open_whitelist_enable = config.getBoolean("whitelist.open.enable", true);
-        update(file, version);
         on = config.getString("toggle-command.messages.when-on", "§b你已開啟界伏盒預覽功能");
         off = config.getString("toggle-command.messages.when-off", "§b你已關閉界伏盒預覽功能");
         only_player = config.getString("toggle-command.messages.only-player", "§c只有玩家能夠使用此指令");
@@ -92,18 +97,17 @@ public class Config {
         enable_close = config.getBoolean("enable.when-close", true);
         enable_pickup = config.getBoolean("enable.pickup-item", true);
         enable_held = config.getBoolean("enable.held-item", true);
-        update(file, version);
         check_update_enable = config.getBoolean("check_update.enable", true);
         check_update_notify_startup = config.getBoolean("check_update.notify.startup", true);
         check_update_notify_login = config.getBoolean("check_update.notify.login", true);
         check_update_notify_message = config.getString("check_update.notify.message", "§bShulkerBoxPreview 已推出 %s, 請在此下載更新:§6https://www.spigotmc.org/resources/shulkerboxpreview.105258");
-        update(file, version);
         client_language = config.getBoolean("client-language", true);
+        auto_update = config.getBoolean("auto-update", true);
     }
 
     private static void update(File file, String version) throws IOException {
         switch (version) {
-            case "1": {
+            case "1" -> {
                 file.delete();
                 FileOutputStream outputStream = new FileOutputStream(file);
                 InputStream in = ShulkerBoxPreview.getResource("config.yml");
@@ -118,14 +122,13 @@ public class Config {
                 temp.set("messages.format.item", format_item);
                 temp.set("messages.format.display-items", format_display_items);
                 temp.set("messages.format.items", format_items);
-                temp.set("lang_lib", lang_lib);
                 temp.set("whitelist.close.list", close_whitelist);
                 temp.set("whitelist.close.enable", close_whitelist_enable);
                 temp.set("whitelist.open.list", open_whitelist);
                 temp.set("whitelist.open.enable", open_whitelist_enable);
                 temp.save(file);
             }
-            case "1.1": {
+            case "1.1" -> {
                 file.delete();
                 FileOutputStream outputStream = new FileOutputStream(file);
                 InputStream in = ShulkerBoxPreview.getResource("config.yml");
@@ -140,7 +143,6 @@ public class Config {
                 temp.set("messages.format.item", format_item);
                 temp.set("messages.format.display-items", format_display_items);
                 temp.set("messages.format.items", format_items);
-                temp.set("lang_lib", lang_lib);
                 temp.set("whitelist.close.list", close_whitelist);
                 temp.set("whitelist.close.enable", close_whitelist_enable);
                 temp.set("whitelist.open.list", open_whitelist);
@@ -157,13 +159,7 @@ public class Config {
                 temp.set("enable.held-item", enable_held);
                 temp.save(file);
             }
-            case "1.2": {
-                FileConfiguration temp = YamlConfiguration.loadConfiguration(file);
-                temp.set("config-version", 1.3);
-                temp.set("lang_lib", "https://raw.githubusercontent.com/YTiceice/LangLib/main");
-                temp.save(file);
-            }
-            case "1.3": {
+            case "1.2" -> {
                 file.delete();
                 FileOutputStream outputStream = new FileOutputStream(file);
                 InputStream in = ShulkerBoxPreview.getResource("config.yml");
@@ -178,7 +174,6 @@ public class Config {
                 temp.set("messages.format.item", format_item);
                 temp.set("messages.format.display-items", format_display_items);
                 temp.set("messages.format.items", format_items);
-                temp.set("lang_lib", lang_lib);
                 temp.set("whitelist.close.list", close_whitelist);
                 temp.set("whitelist.close.enable", close_whitelist_enable);
                 temp.set("whitelist.open.list", open_whitelist);
@@ -198,6 +193,14 @@ public class Config {
                 temp.set("check_update.notify.login", check_update_notify_login);
                 temp.set("check_update.notify.message", check_update_notify_message);
                 temp.save(file);
+            }
+            case "1.3" -> {
+            }
+            default -> {
+                file.renameTo(new File(file + "." + version));
+                FileOutputStream outputStream = new FileOutputStream(file);
+                InputStream in = ShulkerBoxPreview.getResource("config.yml");
+                in.transferTo(outputStream);
             }
         }
     }
