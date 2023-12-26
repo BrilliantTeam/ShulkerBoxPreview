@@ -100,7 +100,7 @@ public class Config {
         check_update_enable = config.getBoolean("check_update.enable", true);
         check_update_notify_startup = config.getBoolean("check_update.notify.startup", true);
         check_update_notify_login = config.getBoolean("check_update.notify.login", true);
-        check_update_notify_message = config.getString("check_update.notify.message", "§bShulkerBoxPreview 已推出 %s, 請在此下載更新:§6https://www.spigotmc.org/resources/shulkerboxpreview.105258");
+        check_update_notify_message = config.getString("check_update.notify.message", "§bShulkerBoxPreview 已推出 %s,§b請在此下載更新：§6https://www.spigotmc.org/resources/shulkerboxpreview.105258");
         client_language = config.getBoolean("client-language", true);
         auto_update = config.getBoolean("auto-update", true);
     }
@@ -193,6 +193,14 @@ public class Config {
                 temp.set("check_update.notify.login", check_update_notify_login);
                 temp.set("check_update.notify.message", check_update_notify_message);
                 temp.save(file);
+            }
+            case "1.3" -> {
+            }
+            default -> {
+                file.renameTo(new File(file + "." + version));
+                FileOutputStream outputStream = new FileOutputStream(file);
+                InputStream in = ShulkerBoxPreview.getResource("config.yml");
+                in.transferTo(outputStream);
             }
             case "1.4" -> {
             }
