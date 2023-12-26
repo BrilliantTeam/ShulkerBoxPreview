@@ -194,7 +194,7 @@ public class Config {
                 temp.set("check_update.notify.message", check_update_notify_message);
                 temp.save(file);
             }
-            case "1.3" -> {
+            case "1.4" -> {
             }
             default -> {
                 file.renameTo(new File(file + "." + version));
