@@ -2,6 +2,7 @@ name: ${project.name}
 main: tech.ice.plugins.ShulkerBoxPreview.Main
 version: ${project.version}
 api-version: 1.17
+folia-supported: true
 author: [ RiceChen_, TangJin ]
 commands:
   sbpreload:
