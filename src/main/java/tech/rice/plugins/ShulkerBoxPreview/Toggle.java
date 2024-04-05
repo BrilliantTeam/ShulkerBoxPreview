@@ -1,4 +1,4 @@
-package tech.ice.plugins.ShulkerBoxPreview;
+package tech.rice.plugins.ShulkerBoxPreview;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
-import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
+import static tech.rice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
+import static tech.rice.plugins.ShulkerBoxPreview.Config.*;
 
 public class Toggle implements CommandExecutor, TabCompleter {
     @Override

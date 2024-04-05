@@ -1,4 +1,4 @@
-package tech.ice.plugins.ShulkerBoxPreview;
+package tech.rice.plugins.ShulkerBoxPreview;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
+import static tech.rice.plugins.ShulkerBoxPreview.Config.*;
 
 public class Reload implements CommandExecutor {
     @Override

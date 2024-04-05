@@ -1,4 +1,4 @@
-package tech.ice.plugins.ShulkerBoxPreview;
+package tech.rice.plugins.ShulkerBoxPreview;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Config.client_language;
+import static tech.rice.plugins.ShulkerBoxPreview.Config.client_language;
 
 public class TJImplementation {
     private static Method CraftItemStack_asNMSCopy;

@@ -1,4 +1,4 @@
-package tech.ice.plugins.ShulkerBoxPreview;
+package tech.rice.plugins.ShulkerBoxPreview;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -15,7 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Objects;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
+import static tech.rice.plugins.ShulkerBoxPreview.Config.*;
 
 public class Main extends JavaPlugin {
 

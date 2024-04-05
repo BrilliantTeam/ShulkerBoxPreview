@@ -1,5 +1,5 @@
 name: ${project.name}
-main: tech.ice.plugins.ShulkerBoxPreview.Main
+main: tech.rice.plugins.ShulkerBoxPreview.Main
 version: ${project.version}
 api-version: 1.17
 folia-supported: true

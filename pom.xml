@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>tech.ice.plugins</groupId>
+    <groupId>tech.rice.plugins</groupId>
     <artifactId>ShulkerBoxPreview</artifactId>
-    <version>1.4</version>
+    <version>1.4.1</version>
 
     <properties>
         <java.version>16</java.version>
@@ -40,7 +40,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
-                                    <shadedPattern>tech.ice.plugins.ShulkerBoxPreview.bstats</shadedPattern>
+                                    <shadedPattern>tech.rice.plugins.ShulkerBoxPreview.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

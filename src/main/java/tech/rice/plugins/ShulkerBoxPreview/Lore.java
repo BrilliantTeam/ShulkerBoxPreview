@@ -1,4 +1,4 @@
-package tech.ice.plugins.ShulkerBoxPreview;
+package tech.rice.plugins.ShulkerBoxPreview;
 
 import com.google.gson.JsonObject;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import tech.ice.plugins.ShulkerBoxPreview.TJImplementation.ComponentProcessor;
-import tech.ice.plugins.ShulkerBoxPreview.TJImplementation.LocaleManager;
+import tech.rice.plugins.ShulkerBoxPreview.TJImplementation.ComponentProcessor;
+import tech.rice.plugins.ShulkerBoxPreview.TJImplementation.LocaleManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
-import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
+import static tech.rice.plugins.ShulkerBoxPreview.Config.*;
+import static tech.rice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
 
 public class Lore {
 

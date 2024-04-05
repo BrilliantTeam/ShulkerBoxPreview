@@ -1,4 +1,4 @@
-package tech.ice.plugins.ShulkerBoxPreview;
+package tech.rice.plugins.ShulkerBoxPreview;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -24,8 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Config.*;
-import static tech.ice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
+import static tech.rice.plugins.ShulkerBoxPreview.Config.*;
+import static tech.rice.plugins.ShulkerBoxPreview.Main.ShulkerBoxPreview;
 
 public class Events implements Listener {
 
