@@ -265,6 +265,41 @@ public class Config {
                 temp.save(file);
             }
             case "1.4.1" -> {
+                file.delete();
+                FileOutputStream outputStream = new FileOutputStream(file);
+                InputStream in = ShulkerBoxPreview.getResource("config.yml");
+                in.transferTo(outputStream);
+                FileConfiguration temp = YamlConfiguration.loadConfiguration(file);
+                temp.set("messages.item-per-n-line", item_per_n_line);
+                temp.set("messages.item-per-n-append", item_per_n_append);
+                temp.set("messages.first-per-n-line", first_per_n_line);
+                temp.set("messages.command.reload", reload);
+                temp.set("messages.command.no-per", no_per);
+                temp.set("messages.format.display-item", format_display_item);
+                temp.set("messages.format.item", format_item);
+                temp.set("messages.format.display-items", format_display_items);
+                temp.set("messages.format.items", format_items);
+                temp.set("whitelist.close.list", close_whitelist);
+                temp.set("whitelist.close.enable", close_whitelist_enable);
+                temp.set("whitelist.open.list", open_whitelist);
+                temp.set("whitelist.open.enable", open_whitelist_enable);
+                temp.set("toggle-command.messages.when-on", on);
+                temp.set("toggle-command.messages.when-off", off);
+                temp.set("toggle-command.messages.only-player", only_player);
+                temp.set("toggle-command.messages.usage", usage);
+                temp.set("force-update", force_update);
+                temp.set("toggle-command.default", default_enable);
+                temp.set("enable.when-open", enable_open);
+                temp.set("enable.when-close", enable_close);
+                temp.set("enable.pickup-item", enable_pickup);
+                temp.set("enable.held-item", enable_held);
+                temp.set("check_update.enable", check_update_enable);
+                temp.set("check_update.notify.startup", check_update_notify_startup);
+                temp.set("check_update.notify.login", check_update_notify_login);
+                temp.set("check_update.notify.message", check_update_notify_message);
+                temp.save(file);
+            }
+            case "1.4.2" -> {
             }
             default -> {
                 file.renameTo(new File(file + "." + version));
