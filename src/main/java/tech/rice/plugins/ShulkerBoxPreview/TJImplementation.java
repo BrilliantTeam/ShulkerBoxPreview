@@ -151,7 +151,7 @@ public class TJImplementation {
                     char nextChar = lastFormat.charAt(i + 1);
 
                     if (nextChar == 'x' && i + 13 < lastFormat.length()) {
-                        String colorCode = lastFormat.substring(i + 2, i + 14);
+                        String colorCode = lastFormat.substring(i + 2, i + 15);
                         // component.setColor(ChatColor.of("#" + colorCode.replace("§", "")));
                         component.setColor(ChatColor.of(colorCode.replace("§", "")));
                         i += 13;
