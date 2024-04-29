@@ -194,12 +194,14 @@ public class TJImplementation {
         private static final int versionNumber;
 
         static {
-            String a = Bukkit.getServer().getClass().getPackage().getName();
-            version = a.substring(a.lastIndexOf(46) + 1);
+            // String a = Bukkit.getServer().getClass().getPackage().getName();
+            // version = a.substring(a.lastIndexOf(46) + 1);
 
-            Matcher matcher = Pattern.compile("v(\\d*)_(\\d*)_R(\\d*)").matcher(version);
-            matcher.matches();
-            versionNumber = Integer.parseInt(matcher.group(1) + matcher.group(2) + matcher.group(3));
+            // Matcher matcher = Pattern.compile("v(\\d*)_(\\d*)_R(\\d*)").matcher(version);
+            // matcher.matches();
+            // versionNumber = Integer.parseInt(matcher.group(1) + matcher.group(2) + matcher.group(3));
+            version = Bukkit.getServer().getBukkitVersion();
+            versionNumber = Bukkit.getServer().getMinecraftVersion();
         }
 
         private static <T> T getTarget(Map<Integer, T> data) {
