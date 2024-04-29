@@ -152,7 +152,8 @@ public class TJImplementation {
 
                     if (nextChar == 'x' && i + 13 < lastFormat.length()) {
                         String colorCode = lastFormat.substring(i + 2, i + 14);
-                        component.setColor(ChatColor.of("#" + colorCode.replace("§", "")));
+                        // component.setColor(ChatColor.of("#" + colorCode.replace("§", "")));
+                        component.setColor(ChatColor.of(colorCode.replace("§", "")));
                         i += 13;
                     } else {
                         applyFormatOrColor(component, nextChar);
@@ -194,14 +195,16 @@ public class TJImplementation {
         private static final int versionNumber;
 
         static {
-            // String a = Bukkit.getServer().getClass().getPackage().getName();
-            // version = a.substring(a.lastIndexOf(46) + 1);
+            String a = Bukkit.getServer().getClass().getPackage().getName();
+            version = a.substring(a.lastIndexOf(46) + 1);
 
-            // Matcher matcher = Pattern.compile("v(\\d*)_(\\d*)_R(\\d*)").matcher(version);
-            // matcher.matches();
-            // versionNumber = Integer.parseInt(matcher.group(1) + matcher.group(2) + matcher.group(3));
-            version = Bukkit.getServer().getBukkitVersion();
-            versionNumber = Bukkit.getServer().getMinecraftVersion();
+            Matcher matcher = Pattern.compile("v(\\d*)_(\\d*)_R(\\d*)").matcher(version);
+            matcher.matches();
+            versionNumber = Integer.parseInt(matcher.group(1) + matcher.group(2) + matcher.group(3));
+
+            // For 1.20.5
+            // version = Bukkit.getServer().getBukkitVersion();
+            // versionNumber = Bukkit.getServer().getMinecraftVersion();
         }
 
         private static <T> T getTarget(Map<Integer, T> data) {
