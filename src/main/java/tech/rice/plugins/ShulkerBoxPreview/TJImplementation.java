@@ -145,6 +145,7 @@ public class TJImplementation {
         }
 
         public static BaseComponent applyLastFormat(BaseComponent component, String lastFormat) {
+            /*
             for (int i = 0; i < lastFormat.length(); i++) {
                 char currentChar = lastFormat.charAt(i);
                 if (currentChar == '§' && i + 1 < lastFormat.length()) {
@@ -160,7 +161,7 @@ public class TJImplementation {
                         i++;
                     }
                 }
-            }
+            }*/
             return component;
         }
 
