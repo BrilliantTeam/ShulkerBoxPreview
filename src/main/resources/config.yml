@@ -24,13 +24,13 @@ messages:
   # 預覽顯示格式
   format:
     # %1s 為物品命名名稱 , %2s 為物品名稱 [例如: 命名石頭 (石頭)]
-    display-item: §f%1$s (%2$s)
-    # %1s 為物品命名名稱 , %2s 為物品名稱 , %d 為數量 [例如: 命名石頭 (石頭) x64]
-    display-items: §f%1$s (%2$s) x%3$d
+    display-item: §f%1$s §f(§f%2$s§f)
+    # %1s 為物品命名名稱 , %2s 為物品名稱 , %3$d 為數量 [例如: 命名石頭 (石頭) x64]
+    display-items: §f%1$s §f(§f%2$s§f) §fx§f%3$d
     # %s 為物品名稱 [例如: 石頭]
     item: §f%s
     # %s 為物品名稱 , %d 為數量 [例如: 石頭 x64]
-    items: §f%s x%d
+    items: §f%s §fx§f%d
 
   # 每行顯示幾個物品
   item-per-n-line: 4
