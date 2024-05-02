@@ -1,5 +1,5 @@
 # 配置檔案版本，請不要更改此數值！
-config-version: 1.4.2
+config-version: 1.4.3
 
 # 檢查插件版本是否為最新
 check_update:
