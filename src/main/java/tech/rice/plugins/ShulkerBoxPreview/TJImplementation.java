@@ -1,4 +1,4 @@
-package tech.ice.plugins.ShulkerBoxPreview;
+package tech.rice.plugins.ShulkerBoxPreview;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
