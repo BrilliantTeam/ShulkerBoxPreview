@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static tech.ice.plugins.ShulkerBoxPreview.Config.client_language;
+import static tech.rice.plugins.ShulkerBoxPreview.Config.client_language;
 
 public class TJImplementation {
     private static Method CraftItemStack_asNMSCopy;
