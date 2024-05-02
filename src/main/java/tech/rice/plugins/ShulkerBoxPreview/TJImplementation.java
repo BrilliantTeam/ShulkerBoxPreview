@@ -130,7 +130,7 @@ public class TJImplementation {
                         case 'r' -> s = new StringBuilder();
                         case 'x' -> {
                             if (i + 13 < array.length) {
-                                s.append(now, i, i + 13);
+                                s.append(now, i, i + 14);
                                 i += 13;
                             }
                         }
