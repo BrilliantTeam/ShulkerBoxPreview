@@ -1,4 +1,4 @@
-package tech.rice.plugins.ShulkerBoxPreview;
+package tech.ice.plugins.ShulkerBoxPreview;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static tech.rice.plugins.ShulkerBoxPreview.Config.client_language;
+import static tech.ice.plugins.ShulkerBoxPreview.Config.client_language;
 
 public class TJImplementation {
     private static Method CraftItemStack_asNMSCopy;
@@ -153,7 +153,6 @@ public class TJImplementation {
                     if (nextChar == 'x' && i + 13 < lastFormat.length()) {
                         String colorCode = lastFormat.substring(i + 2, i + 14);
                         component.setColor(ChatColor.of("#" + colorCode.replace("§", "")));
-                        component.setColor(ChatColor.of(colorCode.replace("§", "")));
                         i += 13;
                     } else {
                         applyFormatOrColor(component, nextChar);
@@ -201,10 +200,6 @@ public class TJImplementation {
             Matcher matcher = Pattern.compile("v(\\d*)_(\\d*)_R(\\d*)").matcher(version);
             matcher.matches();
             versionNumber = Integer.parseInt(matcher.group(1) + matcher.group(2) + matcher.group(3));
-
-            // For 1.20.5
-            // version = Bukkit.getServer().getBukkitVersion();
-            // versionNumber = Bukkit.getServer().getMinecraftVersion();
         }
 
         private static <T> T getTarget(Map<Integer, T> data) {
